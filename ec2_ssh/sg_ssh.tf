@@ -1,10 +1,10 @@
 resource "aws_security_group" "ssh" {
-  name        = "${local.ssh_name}"
+  name        = "${local.sg_ssh_name}"
   description = "SSH Bastion access"
   vpc_id      = "${var.vpc_id}"
 
   tags = "${merge(var.default_tags, map(
-      "Name", "${local.ssh_name}"
+      "Name", "${local.sg_ssh_name}"
     ))}"
 }
 
@@ -43,3 +43,14 @@ resource "aws_security_group_rule" "ir_base_tux_ssh_t" {
   description              = "Allow SSH from bastion"
   security_group_id        = "${var.tux_sg_id}"
 }
+
+# resource "aws_security_group_rule" "ir_ssh_cs_api_t" {
+#   type                     = "ingress"
+#   from_port                = 22
+#   to_port                  = 22
+#   protocol                 = "tcp"
+#   source_security_group_id = "${var.sg_ssh_id}"
+#   description              = "Allow SSH from bastion"
+#   security_group_id        = "${aws_security_group.cs_api.id}"
+# }
+
