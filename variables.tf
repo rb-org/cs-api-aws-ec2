@@ -18,6 +18,10 @@ variable "default_tags" {
   }
 }
 
+variable "remote_state_s3" {
+  default = "xyz-tfm-state"
+}
+
 # EC2
 variable "instance_type" {
   type = "map"

@@ -10,3 +10,13 @@ terraform {
     profile                 = "default"
   }
 }
+
+data "terraform_remote_state" "base" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_s3}"
+    region = "eu-west-1"
+    key    = "env:/${terraform.workspace}/cs-api-base.tfstate"
+  }
+}

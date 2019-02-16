@@ -22,10 +22,6 @@ variable "ami_id" {}
 
 variable "key_name" {}
 
-variable "private_subnets" {
-  type = "list"
-}
-
 variable "public_subnets" {
   type = "list"
 }
@@ -83,3 +79,5 @@ variable "ebs_optimized" {
 
 # Security Groups
 variable "db_clients_sg_id" {}
+
+variable "tux_sg_id" {}
