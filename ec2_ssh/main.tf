@@ -29,7 +29,7 @@ module "instance" {
   disk_metric_name         = "disk_used_percent"
   disk_threshold           = "75"
   disk_unit                = "Percent"
-  diskspace_disks          = ["nvme0n1p1"]
+  diskspace_disks          = ["sda1"]
   path                     = ["/"]
 
   ## Tags
