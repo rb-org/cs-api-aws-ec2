@@ -6,8 +6,8 @@ module "ec2_ssh" {
   source = "./ec2_ssh"
 
   # Network
-  vpc_id         = "${data.terraform_remote_state.base.vpc_id}"
-  public_subnets = "${data.terraform_remote_state.base.public_subnets_ids}"
+  vpc_id         = "${data.terraform_remote_state.cs_api_base.vpc_id}"
+  public_subnets = "${data.terraform_remote_state.cs_api_base.public_subnets_ids}"
 
   # Instance
   instance_type         = "${var.instance_type}"
@@ -19,8 +19,8 @@ module "ec2_ssh" {
   ebs_optimized         = "${var.ebs_optimized}"
 
   # Security Groups
-  db_clients_sg_id = "${data.terraform_remote_state.base.db_clients_sg_id}"
-  tux_sg_id        = "${data.terraform_remote_state.base.tux_sg_id}"
+  db_clients_sg_id = "${data.terraform_remote_state.cs_api_base.db_clients_sg_id}"
+  tux_sg_id        = "${data.terraform_remote_state.cs_api_base.tux_sg_id}"
 
   # Tags
   default_tags = "${var.default_tags}"

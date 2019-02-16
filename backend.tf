@@ -11,7 +11,7 @@ terraform {
   }
 }
 
-data "terraform_remote_state" "base" {
+data "terraform_remote_state" "cs_api_base" {
   backend = "s3"
 
   config {
