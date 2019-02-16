@@ -1,0 +1,54 @@
+module "instance" {
+  source = "github.com/rb-org/tfm-aws-mod-ec2-default?ref=v0.0.2"
+
+  instance_count          = "${var.instance_count[var.app_id]}"
+  instance_name           = "${local.instance_name}"
+  instance_type           = "${var.instance_type[var.app_id]}"
+  instance_profile_name   = "${var.instance_profile_name}"
+  ami_id                  = "${var.ami_id}"
+  subnet_ids              = ["${var.public_subnets}"]
+  key_pair                = "${var.key_name}"
+  user_data               = "./files/userdata_ubu.sh"
+  use_prv_ip              = false
+  public_ip               = true
+  security_group_ids      = ["${aws_security_group.sg_ssh.id}", "${var.db_clients_sg_id}"]
+  enable_monitoring       = "${var.enable_monitoring[var.app_id]}"
+  ebs_optimized           = "${var.ebs_optimized[var.app_id]}"
+  disable_api_termination = "${var.disable_api_term[var.app_id]}"
+  root_volume_type        = "gp2"
+  root_volume_size        = 50
+
+  # CloudWatch Vars
+
+  enable_cw_alarm_cpu      = "${var.enable_cw_alarm_cpu[var.app_id]}"
+  enable_cw_alarm_disk_tux = "${var.enable_cw_alarm_disk_tux[var.app_id]}"
+  enable_cw_metrics        = "${var.enable_cw_metrics[var.app_id]}"
+  disk_namespace           = "CWAgent"
+  disk_comparison_operator = "GreaterThanThreshold"
+  disk_metric_desc         = "Low Disk Space"
+  disk_metric_name         = "disk_used_percent"
+  disk_threshold           = "75"
+  disk_unit                = "Percent"
+  diskspace_disks          = ["nvme0n1p1"]
+  path                     = ["/"]
+
+  ## Tags
+
+  default_tags = "${merge(var.default_tags, 
+      map(
+        "Workspace", format("%s", terraform.workspace),
+        "ChefEnv", "${terraform.workspace}"
+        )
+      )}"
+  app_role      = "${var.app_role}"
+  app_id        = "${var.app_id}"
+  workload      = "${var.workload}"
+  patch_group   = "ubuntu-${terraform.workspace}"
+  patching_day1 = "${var.linux_patch_day_0}"
+  patching_day2 = "${var.linux_patch_day_1}"
+  os            = "ubuntu"
+
+  # Userdata
+
+  userdata_vars = {}
+}
