@@ -4,7 +4,7 @@
 
 | Branch | Status |
 |:---:|:---:|
-| master |   |
+| master | [![CircleCI](https://circleci.com/gh/rb-org/cs-api-aws-ec2/tree/master.svg?style=svg&circle-token=ae7320bcffbddb900ffec7d242ee63e2a93be698)](https://circleci.com/gh/rb-org/cs-api-aws-ec2/tree/master)  |
 | test |   |
 | dev |   |
 
