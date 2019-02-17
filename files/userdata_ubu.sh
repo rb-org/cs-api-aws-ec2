@@ -12,7 +12,7 @@ HOSTNAME=`echo $LOCAL_DNSNAME | cut -d. -f 1`
 instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 wkspc=$(aws ec2 describe-instances --instance-ids $instance_id --region eu-west-1 --query 'Reservations[*].Instances[*].[Tags[?Key==`Workspace`].Value]' --output text)
 name=$(aws ec2 describe-instances --instance-ids $instance_id --region eu-west-1 --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value]' --output text)
-short_name=$(echo $name| head -c -4)
+short_name=$(echo $name| head -c -5)
 
 
 # Add the local hostname to /etc/hosts
