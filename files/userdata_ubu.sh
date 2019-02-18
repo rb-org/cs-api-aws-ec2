@@ -9,12 +9,6 @@ PUBLIC_DNSNAME=`curl http://169.254.169.254/latest/meta-data/public-hostname 2> 
 LOCAL_DNSNAME=`curl http://169.254.169.254/latest/meta-data/local-hostname 2> /dev/null`
 HOSTNAME=`echo $LOCAL_DNSNAME | cut -d. -f 1`
 
-instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-wkspc=$(aws ec2 describe-instances --instance-ids $instance_id --region eu-west-1 --query 'Reservations[*].Instances[*].[Tags[?Key==`Workspace`].Value]' --output text)
-name=$(aws ec2 describe-instances --instance-ids $instance_id --region eu-west-1 --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value]' --output text)
-short_name=$(echo $name| head -c -5)
-
-
 # Add the local hostname to /etc/hosts
 echo "$LOCAL_IPV4 $HOSTNAME $LOCAL_DNSNAME" | sudo tee /etc/hosts
 
@@ -23,12 +17,16 @@ sudo apt-get update
 sudo apt-get install ntp -y
 
 # Install the AWS CLI
-install_aws_cli(){
-    sudo apt-get install python python-pip -y
-    sudo pip install --upgrade pip
-    sudo pip install awscli
-}
+sudo apt-get install python python-pip -y
+sudo pip install --upgrade pip
+sudo pip install awscli
 
+instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+wkspc=$(aws ec2 describe-instances --instance-ids $instance_id --region eu-west-1 --query 'Reservations[*].Instances[*].[Tags[?Key==`Workspace`].Value]' --output text)
+name=$(aws ec2 describe-instances --instance-ids $instance_id --region eu-west-1 --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value]' --output text)
+short_name=$(echo $name| head -c -5)
+
+# Install SSM Agent
 install_ssm_agent(){
     sudo snap install amazon-ssm-agent --classic
 }
@@ -49,6 +47,5 @@ install_cw_agent(){
 }
 
 
-install_aws_cli
 install_ssm_agent
 install_cw_agent
